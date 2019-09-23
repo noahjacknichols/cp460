@@ -368,7 +368,6 @@ def d_polybius(ciphertext, key):
     
 
     x = 0
-    y = 0
     temp1 = ''
     temp2 = ''
     num_newline = ciphertext.count("\n")
@@ -392,8 +391,7 @@ def d_polybius(ciphertext, key):
             x+=1
             temp2 = ciphertext[x]
             plaintext+= polybius_matrix[int(temp1)-1][int(temp2)-1]
-            x+=1
-    print("past 3")    
+            x+=1 #rather ghetto but nonetheless  
             
 
 
