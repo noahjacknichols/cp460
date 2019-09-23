@@ -365,6 +365,7 @@ def d_polybius(ciphertext, key):
             polybius_matrix[i][j] = polybius_string[counter]
             counter+=1
     #print(polybius_matrix)
+    print("test")
 
     x = 0
     y = 0
