@@ -1,11 +1,20 @@
 import solution_A1
 import test_A1
 ##A1 TEST
-x = solution_A1.e_scytale("abcdefghi", 2)
-print(x)
-x = solution_A1.d_scytale(x, 2)
-print(x)
+# x = solution_A1.e_scytale("MOVETHETROOPSSOUTH", 5)
+# print(x)
+# x = solution_A1.d_scytale(x, 5)
+# print(x)
 
+# x = solution_A1.e_scytale("Ptyhon. This is the future, aye/", 5)
+# print(x)
+# x = solution_A1.d_scytale(x, 5)
+# print(x)
+# test = "thisisatest"
+# print(len(test))
+# test = test[4:] + str(-1) + test[:4]
+# print(test)
+# print(len(test))
 
 
 ##A2 TEST
@@ -24,9 +33,15 @@ print(x)
 # print(matches, mismatches)
 
 ##A5 TEST
-
+#test_A1.test_q2()
 # test = "this is a test dummy"
-# x = solution_A1.cryptanalysis_scytale("ciphertext1.txt", "engmix.txt", 4, 50, 0.8)
-# print(x)
 
+# x = solution_A1.cryptanalysis_scytale("ciphertext1.txt", "engmix.txt", 3, 50, 1.2)
+# print("x is this:",x)
+
+# x = solution_A1.e_polybius("", None)
+# print(x)
+#test_A1.test_q4()
+x = solution_A1.d_polybius("test", None)
+#test_A1.test_q3()
 #test_A1.test_q1()

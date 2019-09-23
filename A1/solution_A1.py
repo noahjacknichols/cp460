@@ -126,18 +126,38 @@ def d_scytale(ciphertext, key):
     c = int(math.ceil(len(ciphertext)/key))
     cipherMatrix = new_matrix(r,c,"")
     counter = 0
+    new_cipher = ciphertext
+    n = r*c
+    L =  n - len(ciphertext)
+    if L > c:
+        return ''
+    check = r -1
+    #print(n)
+    for x in range(len(ciphertext), 0, -1):
+        #print(x, check, L)
+        if(check == r -1 and L > 0):
+            #print("add in char")
+            #print(new_cipher[:x], new_cipher[x:])
+            new_cipher = str(new_cipher[:x]) + "^" + str(new_cipher[x:])
+            #print(new_cipher)
+            check = 0
+            L -= 1
+        check+=1
+
     for i in range(c):
         for j in range(r):
-            cipherMatrix[j][i] = ciphertext[counter] if counter < len(ciphertext) else -1
+            cipherMatrix[j][i] = new_cipher[counter] if counter < len(new_cipher) else -1
             counter+=1
-    print(cipherMatrix)
-    for i in range(c):
-        for j in range(r):
-            if cipherMatrix[j][i] != -1:
-                plaintext+= cipherMatrix[j][i]
-                
+    #print(cipherMatrix)
+    for i in range(r):
+        for j in range(c):
+            #print(cipherMatrix[i][j])
+            if(cipherMatrix[i][j] != '^'):
+                plaintext+= cipherMatrix[i][j]
+
     return plaintext
 
+        
 #---------------------------------
 #       Problem 2                #
 #---------------------------------
@@ -151,13 +171,21 @@ def d_scytale(ciphertext, key):
 #-----------------------------------------------------------
 def load_dictionary(dictFile):
     dictList = []
-    dictionary = open(dictFile, encoding="utf8", errors="ignore")
-
-    lines = dictionary.readlines()
-    for word in lines:
-        dictList.append(word.strip("\n"))
-    # your code here
+    with open(dictFile, 'r', encoding="mbcs") as f:
+        for line in f:
+            line = line.strip()
+            dictList.append(line)
     return dictList
+    
+    
+    # dictList = []
+    # dictionary = open(dictFile, encoding="mbcs")
+
+    # lines = dictionary.readlines()
+    # for word in lines:
+    #     dictList.append(word.strip("\n"))
+    # # your code here
+    # return dictList
 
 #-------------------------------------------------------------------
 # Parameters:   text (string)
@@ -169,8 +197,11 @@ def load_dictionary(dictFile):
 #-------------------------------------------------------------------
 def text_to_words(text):
     wordList = []
-    x = text.split(" ")
-    wordList = x
+    x = text.strip().split()
+    for word in x:
+        word = word.strip(string.punctuation)
+        wordList.append(word)
+    
     # your code here
     return wordList
 
@@ -187,14 +218,16 @@ def analyze_text(text, dictFile):
     mismatches = 0
     dictionary = load_dictionary(dictFile)
     wordList = text_to_words(text)
-    #print(dictionary)
-    #print(wordList)
-    for word in wordList:
-        if word in dictionary:
-            matches+=1
+    new_dictionary = []
+    for word in dictionary:
+        word = word.lower()
+        new_dictionary.append(word)
+
+    for x in wordList:
+        if x.lower() in new_dictionary:
+            matches +=1
         else:
-            mismatches+=1
-    
+            mismatches +=1
 
     # your code here
     return(matches,mismatches)
@@ -241,16 +274,21 @@ def is_plaintext(text, dictFile, threshold):
 #---------------------------------------------------
 def cryptanalysis_scytale(cipherFile, dictFile, startKey, endKey, threshold):
     # your code here
-    text = load_dictionary(cipherFile)
-
+    if(threshold < 0 or threshold > 1):
+        print("Operation aborted!")
+        return ''
+    text = file_to_text(cipherFile)
+    ciphertext = ''
+    #print("text is:",text)
     for x in range(startKey, endKey):
-        print(x)
+        #print(x)
         list_words = d_scytale(text, x)
-        print("list words: ", list_words)
+        #print("list words: ", list_words)
         flag = is_plaintext(list_words, dictFile, threshold)
         
         if(flag == True):
-            return (x, d_scytale(text, x))
+            print(list_words)
+            return (x)
         else:
             print("flag ", x, " failed.\n")
     return ''
@@ -275,8 +313,8 @@ def cryptanalysis_scytale(cipherFile, dictFile, startKey, endKey, threshold):
 #           [8]  X   Y    Z   [   \   ]   ^   _
 #---------------------------------------------------
 def get_polybius_square():
-    polybius_square = ''
-    # your code here
+    
+    polybius_square = "".join([chr(ord(' ')+i) for i in range(64)])
     return polybius_square
 
 #--------------------------------------------------------------
@@ -288,6 +326,19 @@ def get_polybius_square():
 def e_polybius(plaintext, key):
     ciphertext = ''
     # your code here
+    polybius_square = get_polybius_square()
+    print(polybius_square)
+    for letter in plaintext:
+        #print(letter)
+        if(letter != '\n'):
+            num = polybius_square.index(letter.upper()) + 1
+            #print("num is",num)
+            x = math.ceil(num/8)
+            y = num - (8* (x -1)) 
+            ciphertext+=str(x)
+            ciphertext+=str(y)
+        else:
+            ciphertext+='\n'
     return ciphertext
 
 #---------------------------------
@@ -306,4 +357,32 @@ def e_polybius(plaintext, key):
 def d_polybius(ciphertext, key):
     plaintext = ''
     # your code here
+    polybius_string = get_polybius_square()
+    polybius_matrix = new_matrix(8,8, "")
+    counter = 0
+    for i in range(8):
+        for j in range(8):
+            polybius_matrix[i][j] = polybius_string[counter]
+            counter+=1
+    print(polybius_matrix)
+
+    x = 0
+    y = 0
+    temp1 = ''
+    temp2 = ''
+    num_newline = ciphertext.count("\n")
+    if (len(ciphertext) - num_newline % 2 > 0):
+        return ''
+    if(ciphertext.isalpha()):
+        return ''
+    while x < len(ciphertext):
+        temp1 = ciphertext[x]
+        if(temp1 == '\n'):
+            plaintext+= ciphertext[x]
+            x+=1
+        elif(temp1 > 0 and temp1 < 9):
+            temp2 = 
+            
+
+
     return plaintext
