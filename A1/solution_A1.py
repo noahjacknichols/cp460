@@ -365,34 +365,33 @@ def d_polybius(ciphertext, key):
             polybius_matrix[i][j] = polybius_string[counter]
             counter+=1
     #print(polybius_matrix)
-    print("test")
+    
 
     x = 0
     y = 0
     temp1 = ''
     temp2 = ''
     num_newline = ciphertext.count("\n")
-    print("pre 1")
-    if ((len(ciphertext - num_newline % 2 > 0):
+
+    if (len(ciphertext) - num_newline) % 2 > 0:
+        print("Invalid ciphertext! Decryption Failed!")
         return ''
-    print("past 1")
     for letter in ciphertext:
         if(letter.isalpha()):
-            print(letter)
+            print("Invalid ciphertext! Decryption Failed!")
             return ''
-    print("past 2")
+    
     while x < len(ciphertext):
-        print('while loop')
+        
         temp1 = ciphertext[x]
         if(temp1 == '\n'):
-            print("newline hit")
+            #print("newline hit")
             plaintext+= ciphertext[x]
             x+=1
         else:
             x+=1
             temp2 = ciphertext[x]
-            print(polybius_matrix[temp1][temp2])
-            plaintext+= polybius_matrix[int(temp1)][int(temp2)]
+            plaintext+= polybius_matrix[int(temp1)-1][int(temp2)-1]
             x+=1
     print("past 3")    
             

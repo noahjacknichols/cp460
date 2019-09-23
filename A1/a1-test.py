@@ -42,9 +42,11 @@ import test_A1
 # x = solution_A1.e_polybius("", None)
 # print(x)
 #test_A1.test_q4()
-x = solution_A1.d_polybius("75616274", None)
-if x == "":
-    print("this is empty")
-# test_A1.test_q5()
+# x = solution_A1.d_polybius("75616274", None)
+# if x == "":
+#     print("this is empty")
+# else:
+#     print(x)
+test_A1.test_q5()
 #test_A1.test_q3()
 #test_A1.test_q1()
