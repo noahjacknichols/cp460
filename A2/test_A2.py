@@ -49,6 +49,7 @@ def test_q2():
     cipher = utilities_A2.file_to_text('ciphertext1.txt')
     ciphertext = cipher.split('\n')
     for i in range(len(ciphertext)):
+        
         c = solution_A2.remove_nonalpha(ciphertext[i])
         print('remove_nonalpha:')
         print(c)

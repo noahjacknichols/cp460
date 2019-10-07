@@ -133,7 +133,7 @@ def remove_nonalpha(text):
     modifiedText = ''
     for letter in text:
         if(letter.isalpha() == True):
-            modifiedText += letter
+            modifiedText += letter.upper()
         
     return modifiedText
 
@@ -146,12 +146,10 @@ def remove_nonalpha(text):
 #---------------------------------------------------------------------------------------
 def blocks_to_baskets(blocks):
     # your code here
-    baskets = [len(blocks)]
-    for i in range(len(blocks)):
-        for block in blocks:
-            if(len(block) <= i):
-                baskets[i] += block[i]
-
+    baskets = [''] * len(blocks[0])
+    for block in blocks:
+        for i in range(len(block)):
+            baskets[i] +=(block[i])
     return baskets
 
 #----------------------------------------------------------------
@@ -162,20 +160,29 @@ def blocks_to_baskets(blocks):
 #----------------------------------------------------------------
 def get_indexOfCoin(ciphertext):
     # your code here
-
-    cipherSet = set(ciphertext)
-    arr = [len(cipherSet)]
+    I = 0
+    cipherSet = list(set(ciphertext))
+    print(cipherSet)
+    arr = [0] * len(cipherSet)
+    print(len(cipherSet))
+    print(len(arr))
+    print(len(ciphertext))
     for i in range(len(cipherSet)):
         for key in ciphertext:
-            if(cipherSet.issuperset(key) ):
+            if(cipherSet[i] == key):
+                # print(i)
                 arr[i] +=1
     if(len(arr) > 0):
 
         max = arr[0]
+        x = 0
         for i in range(len(arr)):
-            if(arr[i] > max):
-                max = arr[i]
-        I = max / len(ciphertext)
+            I = I + (arr[i] / len(ciphertext)) * (((arr[i]) - 1) / (len(ciphertext)-1))
+
+        print(max)
+        # I = max / (len(ciphertext) * (len(ciphertext) - 1))
+        # print(cipherSet[x])
+
     else:
         I = 0
     return I
