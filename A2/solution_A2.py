@@ -1,5 +1,5 @@
 #--------------------------
-# Your Name and ID   <--------------------- Change this -----
+# Noah Nichols
 # CP460 (Fall 2019)
 # Assignment 2
 #--------------------------
@@ -233,9 +233,6 @@ def get_indexOfCoin(ciphertext):
                 # print(i)
                 arr[i] +=1
     if(len(arr) > 0):
-
-        max = arr[0]
-        x = 0
         for i in range(len(arr)):
             I = I + (arr[i] / len(ciphertext)) * (((arr[i]) - 1) / (len(ciphertext)-1))
 
@@ -255,9 +252,9 @@ def get_indexOfCoin(ciphertext):
 #---------------------------------------------------------------
 def getKeyL_friedman(ciphertext):
     # your code here
+    n = len(ciphertext)
     I = get_indexOfCoin(ciphertext)
-    k = math.ceil((0.067 - 0.0385) / (I - 0.0385))
-
+    k = math.ceil((0.027 * n) / (((n-1) * I) + 0.065 - (0.038 * n)))
 
     return k
 
@@ -269,9 +266,7 @@ def getKeyL_friedman(ciphertext):
 #---------------------------------------------------------------
 def getKeyL_shift(ciphertext):
     # your code here
-    x = utilities_A2.cryptanalysis_shift(ciphertext)
-    y = list(x)
-    k = y[0]
+    
     
     return k
 
@@ -290,11 +285,17 @@ def getKeyL_shift(ciphertext):
 #-----------------------------------------------------------
 def adjustKey_blockRotate(key):
     # your code here
-    keyList = list(key)
     updatedKey = (0,0)
-    if len(keyList) != 2:
+    if not type(key) == tuple:
         return updatedKey
-    if keyList[1].is_integer == False:
+    keyList = list(key)
+    print(key)
+    
+
+
+    if not type(key[0]) == int or not type(key[1]) == int:
+        return updatedKey
+    elif len(keyList) != 2:
         return updatedKey
     elif keyList[0] < keyList[1]:
         return updatedKey
@@ -337,13 +338,11 @@ def get_nonalpha(text):
 def insert_nonalpha(text, nonAlpha):
     # your code here
     modifiedText = text
-    for i in range(len(nonAlpha)):
-        for j in range(len(text)):
-            entry = nonAlpha[i]
-            if(entry[1] == j):
-                modifiedText = modifiedText[:j] + entry[0] + modifiedText[j:]
+    if(len(nonAlpha) > 0):
+        for i in range(len(nonAlpha)):
+            modifiedText = modifiedText[:nonAlpha[i][1]] + nonAlpha[i][0] + modifiedText[nonAlpha[i][1]:]
+    
     return modifiedText
-
 #-----------------------------------------------------------
 # Parameters:   plaintext (string)
 #               key (b,r): (int,int)
@@ -355,24 +354,22 @@ def insert_nonalpha(text, nonAlpha):
 
 def e_blockRotate(plaintext, key):
     # your code here
+    nonAlpha = get_nonalpha(plaintext)
     ciphertext =''
-    mkey = list(key)
-    blocks = [''] * mkey[0] 
-    charPerBlock = math.ceil(len(plaintext) / mkey[0])
-    for i in range(len(plaintext)):
-        blocks[math.ceil(i/charPerBlock) -1].append(plaintext[i])
-    
-    for i in range(charPerBlock, len(blocks[len(blocks)], 1)):
-        blocks[len(blocks)].append('q')
-    
-    for block in blocks:
-        for j in range(len(block)):
-            block.append(block.pop())
-    
-    for block in blocks:
-        for i in range(len(block)):
-            ciphertext+= block[i]
+    plaintext = "".join([char for char in plaintext if char.isalpha()])
 
+    blocks = text_to_blocks(plaintext, key[0])
+
+    for _ in range(len(blocks[len(blocks)-1]),len(blocks[0]), 1):
+        blocks[len(blocks)-1]+= 'q'
+    
+    for block in blocks:
+        ciphertext += utilities_A2.shift_string(block, key[1], 'l')
+    
+    ciphertext = insert_nonalpha(ciphertext, nonAlpha)
+
+
+        
 
 
     return ciphertext
@@ -388,24 +385,27 @@ def e_blockRotate(plaintext, key):
 def d_blockRotate(ciphertext, key):
     # your code here
     plaintext = ''
-    mkey = list(key)
-    blocks = [''] * mkey[0] 
-    charPerBlock = math.ceil(len(ciphertext) / mkey[0])
-    for i in range(len(ciphertext)):
-        blocks[math.ceil(i/charPerBlock) -1].append(ciphertext[i])
+    nonAlpha = get_nonalpha(ciphertext)
+    ciphertext = "".join([char for char in ciphertext if char.isalpha()])
+    
+    blocks = text_to_blocks(ciphertext, key[0])
+
+    for i in range(len(blocks)):
+        blocks[i] = utilities_A2.shift_string(blocks[i], key[1], 'r')
+        #print(blocks[i])
+    
+    temp = ''
+    for letter in blocks[len(blocks)-1]:
+        if(letter != 'q'):
+            temp += letter
+    blocks[len(blocks)-1] = temp
     
     for block in blocks:
         for j in range(len(block)):
-            block = block.pop(len(block)) + block
+            plaintext+= block[j]
     
-    blocks[len(blocks)].strip('q')
+    plaintext = insert_nonalpha(plaintext, nonAlpha)
     
-    for block in blocks:
-        for i in range(len(block)):
-            plaintext+= block[i]
-
-
-
     return plaintext
 
 #-----------------------------------------------------------
@@ -426,13 +426,13 @@ def cryptanalysis_blockRotate(ciphertext, b1, b2):
     key = (0,0)
     attempts = 0
     for blockSize in range(b1,b2,1):
-        for possibleKey in range(blockSize, b2,1):
+        for possibleKey in range(1, blockSize,1):
             text = d_blockRotate(ciphertext, (blockSize,possibleKey))
-            if (utilities_A2.is_plaintext(text, 'engmix.txt', 0.8)):
+            if (utilities_A2.is_plaintext(text, 'engmix.txt', 0.9)):
                 
                 plaintext = text
                 key = (blockSize, possibleKey)
-                print("Key found after", attempts, " attempts")
+                print("Key found after", attempts+1, " attempts")
                 print("Key = ", key)
                 print("Plaintext:",plaintext)
 
@@ -453,11 +453,21 @@ def cryptanalysis_blockRotate(ciphertext, b1, b2):
 #                   Polybius Square Cipher, Shfit Cipher, Vigenere Cipher
 #                   All other ciphers are classified as Unknown.
 #               If the given ciphertext is empty return 'Empty Ciphertext'
+
+
+
+#MIDTERM: 
+# --> 1: Vigenere --> enough tools
+# --> 2: Shift (some kind of shift, not caesar) --> try cryptanalysis and chi squared
+# --> 3: mono alpha substitution --> like shift for each character
+# --> 4: Another cipher.
 #-----------------------------------------------------------
 
 
 def get_cipherType(ciphertext):
     # your code here
+    if(len(ciphertext)):
+        return 'Empty Ciphertext'
     return cipherType
 
 #-------------------------------------
@@ -473,15 +483,41 @@ def get_cipherType(ciphertext):
 #               4- if the length of text is odd, add X
 #               5- Output is formatted as pairs, separated by space
 #                   all upper case
+
+# Rule 1: if same row --> 2 chars to right
+# Rule 2: if same col --> 2 chars 
+# Rule 3: if not same row/col --> take the char above the pos of the other char
+
 #-----------------------------------------------------------
 
 
 def formatInput_playfair(plaintext):
     # your code here
-     
+    modifiedPlain = ''
 
+    plaintext = remove_nonalpha(plaintext)
+    n = len(plaintext)
+    i = 0
+    j = 0
 
+    while i < n:
+        if plaintext[i] == "W":
+            plaintext = plaintext[:i] + "VV" + plaintext[i+1:]
+            n+=1
+        i+=1
+    if(len(plaintext) % 2 > 0):
+        if i % 2 == 0 and i != 0:
+            modifiedPlain += ' '
+            modifiedPlain += plaintext[i]
+        else:
+            modifiedPlain += plaintext[i]
+    for i in range(len(modifiedPlain)):
+        if i != 0:
+            if modifiedPlain[i-1] == modifiedPlain[i]:
+                modifiedPlain = modifiedPlain[:i] + 'X' + modifiedPlain[i+1:]
+    
     return modifiedPlain
+
 
 #-------------------------------------------------------------------------------------
 # Parameters:   plaintext(string)
