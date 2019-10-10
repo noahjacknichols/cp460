@@ -498,7 +498,6 @@ def formatInput_playfair(plaintext):
     plaintext = remove_nonalpha(plaintext)
     n = len(plaintext)
     i = 0
-    j = 0
 
     while i < n:
         if plaintext[i] == "W":
@@ -506,6 +505,8 @@ def formatInput_playfair(plaintext):
             n+=1
         i+=1
     if(len(plaintext) % 2 > 0):
+        plaintext+='X'
+    for i in range(len(plaintext)):
         if i % 2 == 0 and i != 0:
             modifiedPlain += ' '
             modifiedPlain += plaintext[i]
@@ -529,6 +530,42 @@ def formatInput_playfair(plaintext):
 
 def e_playfair(plaintext, key):
     # your code here
+    ciphertext=''
+    plain = formatInput_playfair(plaintext)
+    plainList = plain.split()
+    size = len(key)
+    for combo in plainList:
+        Ax = -1
+        Ay = -1
+        Bx = -1
+        By = -1
+        
+        for i in range(len(key)):
+            for j in range(len(key[0])):
+                if(combo[0] == key[i][j]):
+                    Ax = j
+                    Ay = i
+                if(combo[1] == key[i][j]):
+                    Bx = j
+                    By = i
+        if(Ax != -1 and Ay != -1 and Bx != -1 and By != -1):
+            if(Ax == Bx):
+                # print(Ax+1)
+                # print(Ay)
+                # print(Ax + 1 % size)
+                ciphertext += key[(Ay+1) % size][Ax]
+                ciphertext += key[(By+1) % size][Bx]
+                ciphertext += ' '
+            elif(Ay == By):
+
+                ciphertext += key[Ay][(Ax+1)%size]
+                ciphertext += key[By][(Bx+1) % size]
+                ciphertext += ' '
+            else:
+                ciphertext += key[By][(Bx+1)% size]
+                ciphertext += key[Ay][(Ax+1)% size]
+                ciphertext+= ' '
+
     return ciphertext
 
 #-------------------------------------------------------------------------------------
@@ -541,4 +578,53 @@ def e_playfair(plaintext, key):
 
 def d_playfair(ciphertext, key):
     # your code here
+    
+    plaintext =''
+    
+    cipher = formatInput_playfair(ciphertext)
+    cipherList = cipher.split()
+    # print("CipherList:", cipherList)
+    size = len(key)
+    for combo in cipherList:
+        # print("d_playfair")
+        Ax = -1
+        Ay = -1
+        Bx = -1
+        By = -1
+
+        for i in range(len(key)):
+            for j in range(len(key[0])):
+                if(combo[0] == key[i][j]):
+                    Ax = j
+                    Ay = i
+                if(combo[1] == key[i][j]):
+                    Bx = j
+                    By = i
+        if(Ax != -1 and Ay != -1 and Bx != -1 and By != -1):
+            if(Ax == Bx):
+                
+                plaintext += key[(Ay-1+size) % size][Ax]
+                plaintext += key[(By-1+size) % size][Bx]
+                
+            elif(Ay == By):
+                
+                plaintext += key[Ay][(Ax-1+size) % size]
+                plaintext += key[By][(Bx-1+size) % size]
+                
+            else:
+                
+                plaintext += key[By][(Bx-1+size) % size]
+                plaintext += key[Ay][(Ax-1+size) % size]
+
+    if (plaintext[len(plaintext)-1]) == 'X':
+        plaintext = plaintext[:len(plaintext)-1]
+
+    for i in range(len(plaintext)):
+        if(i != 0):
+            if(plaintext[i] == 'X'):
+                plaintext = plaintext[:i] + plaintext[i-1] + plaintext[i+1:]
+
+                
+
+    
     return plaintext

@@ -203,16 +203,147 @@ def getKeyL_shift(ciphertext):
 
 
 #---------------------------------
-#Q3:  #
+#   Q3:  Block Rotate Cipher     #
 #---------------------------------
-# stay tuned
+#-----------------------------------------------------------
+# Parameters:   key (b,r)
+# Return:       updatedKey (b,r)
+# Description:  Assumes given key is in the format of (b(int),r(int))
+#               Updates the key in three scenarios:
+#               1- The key is too big (use modulo)
+#               2- The key is negative
+#               if an invalid key is given print error message and return (0,0)
+#-----------------------------------------------------------
+def adjustKey_blockRotate(key):
+    # your code here
+    return updatedKey
+
+#-----------------------------------
+# Parameters:   text (string)
+# Return:       nonalphaList (2D List)
+# Description:  Analyzes a given string
+#               Returns a list of non-alpha characters along with their positions
+#               Format: [[char1, pos1],[char2,post2],...]
+#               Example: get_nonalpha('I have 3 cents.') -->
+#                   [[' ', 1], [' ', 6], ['3', 7], [' ', 8], ['.', 14]]
+#-----------------------------------
+
+
+def get_nonalpha(text):
+    # your code here
+    return nonalphaList
+
+#-----------------------------------
+# Parameters:   text (str)
+#               2D list: [[char1,pos1], [char2,pos2],...]
+# Return:       modifiedText (string)
+# Description:  inserts a list of nonalpha characters in the positions
+#-----------------------------------
+
+
+def insert_nonalpha(text, nonAlpha):
+    # your code here
+    return modifiedText
+
+#-----------------------------------------------------------
+# Parameters:   plaintext (string)
+#               key (b,r): (int,int)
+# Return:       ciphertext (string)
+# Description:  break plaintext into blocks of size b
+#               rotate each block r times to the left
+#-----------------------------------------------------------
+
+
+def e_blockRotate(plaintext, key):
+    # your code here
+    return ciphertext
+
+#-----------------------------------------------------------
+# Parameters:   ciphertext (string)
+#               key (b,r): (int,int)
+# Return:       plaintext (string)
+# Description:  Decryption using Block Rotate Cipher
+#-----------------------------------------------------------
+
+
+def d_blockRotate(ciphertext, key):
+    # your code here
+    return plaintext
+
+#-----------------------------------------------------------
+# Parameters:   ciphertext (string)
+#               b1 (int): starting block size
+#               b2 (int): end block size
+# Return:       plaintext,key
+# Description:  Cryptanalysis of Block Rotate Cipher
+#               Returns plaintext and key (r,b)
+#               Attempts block sizes from b1 to b2 (inclusive)
+#               Prints number of attempts
+#-----------------------------------------------------------
+
+
+def cryptanalysis_blockRotate(ciphertext, b1, b2):
+    # your code here
+    return plaintext, key
 
 #---------------------------------
-#Q4:  #
+#       Q4: Cipher Detector     #
 #---------------------------------
-# stay tuned
+#-----------------------------------------------------------
+# Parameters:   ciphertext (string)
+# Return:       cipherType (string)
+# Description:  Detects the type of a given ciphertext
+#               Categories: "Atbash Cipher, Spartan Scytale Cipher,
+#                   Polybius Square Cipher, Shfit Cipher, Vigenere Cipher
+#                   All other ciphers are classified as Unknown.
+#               If the given ciphertext is empty return 'Empty Ciphertext'
+#-----------------------------------------------------------
 
-#---------------------------------
-#Q5:  #
-#---------------------------------
-# stay tuned
+
+def get_cipherType(ciphertext):
+    # your code here
+    return cipherType
+
+#-------------------------------------
+#  Q5: Wheastone Playfair Cipher     #
+#-------------------------------------
+#-----------------------------------------------------------
+# Parameters:   plaintext (string)
+# Return:       modifiedPlain (string)
+# Description:  Modify a plaintext through the following criteria
+#               1- All non-alpha characters are removed
+#               2- Every 'W' is translsated into 'VV' double V
+#               3- Convert every double character ## to #X
+#               4- if the length of text is odd, add X
+#               5- Output is formatted as pairs, separated by space
+#                   all upper case
+#-----------------------------------------------------------
+
+
+def formatInput_playfair(plaintext):
+    # your code here
+    return modifiedPlain
+
+#-------------------------------------------------------------------------------------
+# Parameters:   plaintext(string)
+#               key: playfair Square (2D List)
+# Return:       ciphertext (string)
+# Description:  Encryption using Wheatstone Playfair Cipher
+#---------------------------------------------------------------------------------------
+
+
+def e_playfair(plaintext, key):
+    # your code here
+    return ciphertext
+
+#-------------------------------------------------------------------------------------
+# Parameters:   plaintext(string)
+#               key: playfair Square (2D List)
+# Return:       ciphertext (string)
+# Description:  Decryption using Wheatstone Playfair Cipher
+#-------------------------------------------------------------------------------
+
+
+def d_playfair(ciphertext, key):
+    # your code here
+    return plaintext
