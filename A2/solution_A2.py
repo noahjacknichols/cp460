@@ -462,6 +462,10 @@ def cryptanalysis_blockRotate(ciphertext, b1, b2):
 # --> 3: mono alpha substitution --> like shift for each character
 # --> 4: Another cipher.
 #-----------------------------------------------------------
+#Scytale --> chi squared < 150
+#Polybius 
+#Vigenere --> I ( random (0.035) - E (0.065))
+#Atbash/Shift --> I same as english, flip Atbash cipher run I again tells you Atbash
 
 
 def get_cipherType(ciphertext):
@@ -628,3 +632,47 @@ def d_playfair(ciphertext, key):
 
     
     return plaintext
+
+
+#simple substitution (password)
+
+#Base string: abc....xyz <-- lower
+#Substring:   rfg....asp <-- random
+
+#if basestring is known:
+    #key: substring
+#if basestring is unkown:
+    #key: (basestring, substring)
+
+#drawback: some characters are aligned.
+
+def get_subKey(password, baseString):
+    subkey = ''
+    for passChar in password:
+        if passChar not in subkey:
+            subkey+= passChar
+    for baseChar in baseString:
+        if baseChar not in subkey:
+            subkey+= baseChar
+    return subkey
+
+def e_substituion(plaintext, key):
+    baseString = key[0]
+    subString = key[1]
+
+    ciphertext =''
+    for plainChar in plaintext:
+        upperFlag = True if plainChar.isupper() else False
+        plainChar = plainChar.lower()
+        if(plainChar in baseString):
+            i = baseString.index(plainChar)
+            cipherChar = subString[i]
+            cipherChar = cipherChar.upper() if upperFlag else cipherChar
+        else:
+            cipherChar = plainChar
+        ciphertext+= cipherChar
+
+        
+        
+        
+    
