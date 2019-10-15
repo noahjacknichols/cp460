@@ -222,24 +222,14 @@ def get_indexOfCoin(ciphertext):
     # your code here
     I = 0
     cipherSet = list(set(ciphertext))
-    #print(cipherSet)
     arr = [0] * len(cipherSet)
-    # print(len(cipherSet))
-    # print(len(arr))
-    # print(len(ciphertext))
     for i in range(len(cipherSet)):
         for key in ciphertext:
             if(cipherSet[i] == key):
-                # print(i)
                 arr[i] +=1
     if(len(arr) > 0):
         for i in range(len(arr)):
             I = I + (arr[i] / len(ciphertext)) * (((arr[i]) - 1) / (len(ciphertext)-1))
-
-        #print(max)
-        # I = max / (len(ciphertext) * (len(ciphertext) - 1))
-        # print(cipherSet[x])
-
     else:
         I = 0
     return I
@@ -266,8 +256,19 @@ def getKeyL_friedman(ciphertext):
 #---------------------------------------------------------------
 def getKeyL_shift(ciphertext):
     # your code here
-    
-    
+    counts = [0] * 21
+    for i in range(1,21):
+        s = utilities_A2.shift_string(ciphertext, i, 'r')
+        matches = 0
+        for j in range(i, len(s)):
+            if ciphertext[j] == s[j]:
+                matches += 1
+                counts[i] = matches
+    maxN = counts[0]
+    for num in counts:
+        if num > maxN:
+            maxN = num
+    k = counts.index(maxN)
     return k
 
 
@@ -287,23 +288,28 @@ def adjustKey_blockRotate(key):
     # your code here
     updatedKey = (0,0)
     if not type(key) == tuple:
+        print("Error (adjustKey_blockRotate): Invalid Key")
         return updatedKey
     keyList = list(key)
-    print(key)
+    #print(key)
     
 
 
     if not type(key[0]) == int or not type(key[1]) == int:
+        print("Error (adjustKey_blockRotate): Invalid Key")
         return updatedKey
     elif len(keyList) != 2:
+        print("Error (adjustKey_blockRotate): Invalid Key")
         return updatedKey
-    elif keyList[0] < keyList[1]:
+    elif keyList[0] < 1:
+        print("Error (adjustKey_blockRotate): Invalid Key")
         return updatedKey
     else:
         if(keyList[1] < 1):
             keyList[1] = 1
         else:
-            keyList[1] = updatedKey[1] % updatedKey[0]
+            
+            keyList[1] = keyList[1] % keyList[0]
         updatedKey = (keyList[0], keyList[1])
     return updatedKey
 
@@ -470,8 +476,53 @@ def cryptanalysis_blockRotate(ciphertext, b1, b2):
 
 def get_cipherType(ciphertext):
     # your code here
-    if(len(ciphertext)):
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    print()
+    strippedCipher = remove_nonalpha(ciphertext)
+    #print(strippedCipher)
+
+    I_english = 0.065
+    margin = 0.003
+
+    cipherType = ''
+    
+    if(len(ciphertext) < 1):
         return 'Empty Ciphertext'
+    I = get_indexOfCoin(ciphertext)
+    #print("I is:", I)
+    
+    chi = utilities_A2.get_chiSquared(ciphertext)
+    #print("chi is:", chi)
+    if(chi < 400):
+        return "Spartan Scytale Cipher"
+    elif(I > I_english - margin and I < I_english + margin):
+        #print("ATBASH OR SHIFT CIPHER")
+        temp = ''
+        for c in strippedCipher:
+            temp += alphabet[25- alphabet.index(c)]
+
+        
+        I_temp = get_indexOfCoin(temp)
+        chi_Temp = utilities_A2.get_chiSquared(temp)
+        #print("flipped I is:", I_temp)
+        #print(utilities_A2.get_chiSquared(strippedCipher))
+        
+        if(chi_Temp < 150):
+            return("Atbash Cipher")
+        else:
+            return("Shift Cipher")
+    elif(len(strippedCipher) == 0):
+        return("Polybius Square Cipher")
+    elif(I > 0.0415 and I < 0.062):
+        return("Vigenere Cipher")
+    else:
+        return("Unknown")
+        
+
+    
+    
+        
+    
     return cipherType
 
 #-------------------------------------
@@ -557,17 +608,20 @@ def e_playfair(plaintext, key):
                 # print(Ax+1)
                 # print(Ay)
                 # print(Ax + 1 % size)
+                #print("SAME ROW")
                 ciphertext += key[(Ay+1) % size][Ax]
                 ciphertext += key[(By+1) % size][Bx]
                 ciphertext += ' '
             elif(Ay == By):
-
+                #print("SAME COL")
                 ciphertext += key[Ay][(Ax+1)%size]
                 ciphertext += key[By][(Bx+1) % size]
                 ciphertext += ' '
             else:
-                ciphertext += key[By][(Bx+1)% size]
-                ciphertext += key[Ay][(Ax+1)% size]
+                #print("NOTHING SAME")
+                ciphertext += key[Ay][Bx]
+                ciphertext += key[By][Ax]
+                
                 ciphertext+= ' '
 
     return ciphertext
@@ -589,6 +643,7 @@ def d_playfair(ciphertext, key):
     cipherList = cipher.split()
     # print("CipherList:", cipherList)
     size = len(key)
+    #print(cipher)
     for combo in cipherList:
         # print("d_playfair")
         Ax = -1
@@ -606,27 +661,36 @@ def d_playfair(ciphertext, key):
                     By = i
         if(Ax != -1 and Ay != -1 and Bx != -1 and By != -1):
             if(Ax == Bx):
+                #print("SAME ROW")
                 
                 plaintext += key[(Ay-1+size) % size][Ax]
                 plaintext += key[(By-1+size) % size][Bx]
+                if(combo != cipherList[len(cipherList)-1]):
+                    plaintext+= " "
                 
             elif(Ay == By):
-                
+                #print("SAME COL")
                 plaintext += key[Ay][(Ax-1+size) % size]
                 plaintext += key[By][(Bx-1+size) % size]
+                if(combo != cipherList[len(cipherList)-1]):
+                    plaintext += " "
                 
             else:
-                
-                plaintext += key[By][(Bx-1+size) % size]
-                plaintext += key[Ay][(Ax-1+size) % size]
+                #print("NOTHING SAME")
+                plaintext += key[Ay][Bx]
+                plaintext += key[By][Ax]
+                if(combo != cipherList[len(cipherList)-1]):
+                    plaintext += " "
 
-    if (plaintext[len(plaintext)-1]) == 'X':
-        plaintext = plaintext[:len(plaintext)-1]
+            
 
-    for i in range(len(plaintext)):
-        if(i != 0):
-            if(plaintext[i] == 'X'):
-                plaintext = plaintext[:i] + plaintext[i-1] + plaintext[i+1:]
+    # if (plaintext[len(plaintext)-1]) == 'X':
+    #     plaintext = plaintext[:len(plaintext)-1]
+
+    # for i in range(len(plaintext)):
+    #     if(i != 0):
+    #         if(plaintext[i] == 'X'):
+    #             plaintext = plaintext[:i] + plaintext[i-1] + plaintext[i+1:]
 
                 
 
