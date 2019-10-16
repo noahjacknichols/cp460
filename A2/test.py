@@ -10,7 +10,7 @@ import utilities_A2
 # x =solution_A2.formatInput_playfair(p)
 
 # print(x)
-test_A2.test_q5()
+test_A2.test_q3()
 
 # ciphertext = utilities_A2.file_to_text("pg2009.txt")
 # print(utilities_A2.get_chiSquared(ciphertext))
