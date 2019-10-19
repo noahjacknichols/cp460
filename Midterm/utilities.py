@@ -324,3 +324,46 @@ def e_shift(plaintext, key):
 def d_shift(ciphertext, key):
     direction = 'l' if key[1] == 'r' else 'r'
     return e_shift(ciphertext, (key[0], direction))
+
+
+def getFreq(ciphertext):
+
+    freqList = [0] * 26
+    alphabet = get_lower().upper()
+
+    for c in ciphertext:
+        if c.upper() in alphabet:
+            freqList[alphabet.index(c.upper())] += 1
+    
+    for indice in freqList:
+        indice = indice / len(ciphertext)
+    
+    return freqList
+
+
+
+
+def compareFreq(engFreq, ciphFreq):
+    matchingFreq = ['-']*26
+    engFreq = get_freqTable()
+    margin = 0.0005 #change this or pass it into the function
+
+    for engLetter in engFreq:
+        for ciphLetter in ciphFreq:
+            if(engLetter - margin <= ciphLetter and engLetter + margin >= ciphLetter):
+                matchingFreq[engFreq.index(engLetter)] = ciphLetter
+
+    return matchingFreq
+
+
+
+def d_freqSubstitution(ciphertext):
+    alphabet = get_lower().upper()
+    ciphFreq = getFreq(ciphertext)
+    engFreq = get_freqTable()
+    matchingFreq = compareFreq(engFreq, ciphFreq)
+    print(matchingFreq)
+
+    
+
+    

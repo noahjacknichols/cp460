@@ -6,6 +6,7 @@
 
 import math
 import utilities_A2
+import utilities
 
 #---------------------------------
 #Q1: Vigenere Cipher (Version 2) #
@@ -494,10 +495,10 @@ def get_cipherType(ciphertext):
     #strip all trailing Q's to be safe
     
 
-
+    ciphertext = utilities.strip_trailing_Q(ciphertext)
     chi = utilities_A2.get_chiSquared(ciphertext)
     #print("chi is:", chi)
-    if(chi < 400):
+    if(chi < 150):
         return "Spartan Scytale Cipher"
     elif(I > I_english - margin and I < I_english + margin):
         #print("ATBASH OR SHIFT CIPHER")
