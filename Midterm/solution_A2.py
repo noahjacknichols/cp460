@@ -491,6 +491,10 @@ def get_cipherType(ciphertext):
     I = get_indexOfCoin(ciphertext)
     #print("I is:", I)
     
+    #strip all trailing Q's to be safe
+    
+
+
     chi = utilities_A2.get_chiSquared(ciphertext)
     #print("chi is:", chi)
     if(chi < 400):

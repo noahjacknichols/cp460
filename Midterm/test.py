@@ -1,22 +1,13 @@
 import solution_A2
-import test_A2
 import utilities_A2
+import utilities
+import simple_substitution_cipher
 
 
+simple_substitution_cipher.test_substitution()
 
-# key = (10)
-# solution_A2.adjustKey_blockRotate(key)
-# p = "No dust"
-# x =solution_A2.formatInput_playfair(p)
+# ciphertext = 'dfashds fsdafhsaldkjdh awflsdkjfh dfasdqqqqq adfsd asdfsa dsfasdfsd gfdsgh hdfgsawr afdsfasfda fdsfasdf asfdaef'
 
-# print(x)
-test_A2.test_q3()
-
-# ciphertext = utilities_A2.file_to_text("pg2009.txt")
-# print(utilities_A2.get_chiSquared(ciphertext))
-
-# ciphertext = "FHALENVLELVNDA"
-
-
-# x = solution_A2.get_indexOfCoin(ciphertext)
-# print("X is:", x)
+# print(ciphertext)
+# chi = utilities.block_chiSquared(ciphertext, 2)
+# print(chi)
