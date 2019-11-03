@@ -559,4 +559,40 @@ def e_myszkowski(plaintext, key):
 def d_myszkowski(ciphertext, key):
     # your code here
     plaintext = ''
+    order = get_keyOrder_myszkowski(key)
+    col = len(order)
+    row = math.ceil(len(ciphertext) / col)
+    matrix = [[''] * col for i in range(row)]
+    counter = 0
+    ord1=[]
+    for i in order:
+        ord1.append(i)
+    ord1.sort()
+    keysSeen = []
+    for x in ord1:
+        if(x not in keysSeen):
+            for j in range(row):
+                for l in range(ord1.count(ord1[ord1.index(x)])):
+                    matrix[j][ord1.index(x)+l] = ciphertext[counter]
+                    counter+=1
+        keysSeen.append(x)
+
+    newMatrix = [[''] * col for i in range(row)]
+    c = 0
+    for i in ord1:
+        for j in range(row):
+            x = order.index(i)
+
+            newMatrix[j][x] = matrix[j][c]
+        order.insert(order.index(i), 'L')
+        order.remove(i)
+        c += 1
+
+    for i in range(row):
+        for j in range(col):
+            plaintext+= newMatrix[i][j]
+
+    plaintext = plaintext.rstrip('q')
+ 
+
     return plaintext
