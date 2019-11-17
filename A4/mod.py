@@ -1,5 +1,5 @@
 #--------------------------
-# Your Name and ID   <--------------------- Change this -----
+# Noah Nichols (160554770)
 # CP460 (Fall 2019)
 # Assignment 4
 #--------------------------
@@ -18,7 +18,17 @@ import string
 #-----------------------------------------------------------
 def residue_set(mod):
     # your code here
-    return
+    if(type(mod) is not int):
+        return 'Error (residue_set): Invalid mod'
+    elif(mod < 1):
+        return 'Error (residue_set): Invalid mod'
+    
+    else:
+        residueSet = []
+        for i in range(mod):
+            residueSet.append(i)
+        
+    return residueSet
 
 #-----------------------------------------------------------
 # Parameters:   num (any integer)
@@ -34,7 +44,13 @@ def residue_set(mod):
 #-----------------------------------------------------------
 def residue(num,mod):
     # your code here
-    return
+    if(type(num) is not int):
+        return 'Error (residue): Invalid num'
+    elif(mod < 1):
+        return 'Error (residue): Invalid mod'
+    else:
+        # we can now calculate residue
+        return num % mod
 
 #-----------------------------------------------------------
 # Parameters:   a (any integer)
@@ -52,8 +68,15 @@ def residue(num,mod):
 #-----------------------------------------------------------
 def is_congruent(a,b,m):
     # your code here
-    return
-
+    if(m < 1):
+        return 'Error (is_congruent): Invalid mod'
+    elif(type(a) is not int or type(b) is not int):
+        return 'Error (is_congruent): Invalid input num'
+    else:
+        if(a%m == 0 and b%m == 0):
+            return True
+        else:
+            return False
 #-----------------------------------------------------------
 # Parameters:   a (any integer)
 #               b (any integer)
@@ -69,7 +92,13 @@ def is_congruent(a,b,m):
 #-----------------------------------------------------------
 def add(a,b,m):
     # your code here
-    return
+    
+    if(m < 1):
+        return 'Error (add): Invalid mod'
+    elif(type(a) is not int or type(b) is not int):
+        return 'Error (add): Invalid input num'
+    else:
+        return (a+b)%m
 
 #-----------------------------------------------------------
 # Parameters:   a (any integer)
@@ -86,7 +115,13 @@ def add(a,b,m):
 #-----------------------------------------------------------
 def sub(a,b,m):
     # your code here
-    return
+    if(m < 1):
+        return 'Error (add): Invalid mod'
+    elif(type(a) is not int or type(b) is not int):
+        return 'Error (add): Invalid input num'
+    else:
+        return (a-b)%m
+
 
 #-----------------------------------------------------------
 # Parameters:   a (any integer)
@@ -102,7 +137,17 @@ def sub(a,b,m):
 #-----------------------------------------------------------
 def add_inv(a,m):
     # your code here
-    return
+    if(m < 1):
+        return 'Error (add_inv): Invalid mod'
+    elif(type(a) is not int):
+        return 'Error (add_inv): Invalid input num'
+    else:
+        res_set = residue_set(m)
+        for residue in res_set:
+            
+            if((a+residue) %m == 0):
+                return residue
+    return 0
 
 #-----------------------------------------------------------
 # Parameters:   m (positive integer)
@@ -115,7 +160,21 @@ def add_inv(a,m):
 #-----------------------------------------------------------
 def add_table(m):
     # your code here
-    return
+    if(type(m) is not int):
+        print('Error (add_table): Invalid mod')
+        return 'Error (add_table): Invalid mod'
+    elif(m < 1):
+        print('Error (add_table): Invalid mod')
+        return 'Error (add_table): Invalid mod'
+    else:
+        matrix = []
+        for c in range(m):
+            row = []
+            for r in range(m):
+                row.append(add(r,c,m))
+            matrix.append(row)
+        return matrix
+                
 
 #-----------------------------------------------------------
 # Parameters:   m (positive integer)
@@ -128,6 +187,20 @@ def add_table(m):
 #-----------------------------------------------------------
 def sub_table(m):
     # your code here
+    if(type(m) is not int):
+        print('Error (add_table): Invalid mod')
+        return 'Error (add_table): Invalid mod'
+    elif(m < 1):
+        print('Error (add_table): Invalid mod')
+        return 'Error (add_table): Invalid mod'
+    else:
+        matrix = []
+        for c in range(m):
+            row = []
+            for r in range(m):
+                row.append(sub(r,c,m))
+            matrix.append(row)
+        return matrix
     return
 
 #-----------------------------------------------------------
@@ -141,7 +214,20 @@ def sub_table(m):
 #-----------------------------------------------------------
 def add_inv_table(m):
     # your code here
-    return
+    if(type(m) is not int):
+        return 'Error (add_inv_table): Invalid mod'
+    elif(m < 1):
+        print('Error (add_inv_table): Invalid mod')
+    matrix = []
+    numRow = []
+    invRow = []
+    for i in range(m):
+        numRow.append(i)
+        invRow.append(add_inv(i,m))
+    matrix.append(numRow)
+    matrix.append(invRow)
+
+    return matrix
 
 #-----------------------------------------------------------
 # Parameters:   a (any integer)
@@ -158,7 +244,12 @@ def add_inv_table(m):
 #-----------------------------------------------------------
 def mul(a,b,m):
     # your code here
-    return
+    if(m < 1):
+        return 'Error (mul): Invalid mod'
+    elif(type(a) is not int or type(b) is not int):
+        return 'Error (mul): Invalid input num'
+    else:
+        return a*b%m
 
 #-----------------------------------------------------------
 # Parameters:   m (positive integer)
@@ -175,7 +266,18 @@ def mul(a,b,m):
 #-----------------------------------------------------------
 def mul_table(m):
     # your code here
-    return
+    if(m < 1):
+        print('Error (mul_table): Invalid mod')
+        return 'Error (mul_table): Invalid mod'
+    else:
+        matrix = []
+        for c in range(m):
+            row = []
+            for r in range(m):
+                row.append(mul(r,c,m))
+            matrix.append(row)
+        return matrix
+
 
 #-----------------------------------------------------------
 # Parameters:   n (an integer)
@@ -186,7 +288,13 @@ def mul_table(m):
 #-----------------------------------------------------------
 def is_prime(n):
     # your code here
-    return
+    if(n < 1):
+        return False
+    if(n >1):
+        for i in range(2,n):
+            if(n % i) == 0:
+                return False
+    return True
 
 #-----------------------------------------------------------
 # Parameters:   a (an integer)
@@ -200,7 +308,17 @@ def is_prime(n):
 #-----------------------------------------------------------
 def gcd(a,b):
     # your code here
-    return
+    if(type(a) is not int or type(b) is not int):
+        return 'Error (gcd): Invalid input value'
+    elif(a < 1 or b < 1):
+        return 'Error (gcd): Invalid input value' 
+
+    r = a%b 
+    while r:
+        a = b
+        b = r
+        r = a%b
+    return b
 
 #-----------------------------------------------------------
 # Parameters:   a (an integer)
@@ -213,7 +331,10 @@ def gcd(a,b):
 #-----------------------------------------------------------
 def is_relatively_prime(a,b):
     # your code here
-    return
+    if(type(a) is not int or type(b) is not int):
+        return 'Error(is_relatively_prime): Invalid input num'
+    else:
+        return True if gcd(a,b) == 1 else False
 
 #-----------------------------------------------------------
 # Parameters:   a (an integer)
@@ -229,7 +350,20 @@ def is_relatively_prime(a,b):
 #-----------------------------------------------------------
 def has_mul_inv(a,m):
     # your code here
-    return
+    if(type(a) is not int):
+        return 'Error (has_mul_inv): Invalid input num'
+    elif(type(m) is not int):
+        return 'Error (has_mul_inv): Invalid mod'
+    else:
+        resSet = residue_set(m)
+        # print(resSet[1:])
+        for residue in resSet[1:]:
+            # print("(a,residue):",(a,residue))
+            # print("mult:",a*residue)
+            # print("bool:",(a*residue)%m==0)
+            if((a*residue) %m == 1):
+                return True
+    return False
 
 #-----------------------------------------------------------
 # Parameters:   a (an integer)
@@ -243,7 +377,19 @@ def has_mul_inv(a,m):
 #-----------------------------------------------------------
 def eea(a,b):
     # your code here
-    return
+    if(type(a) is not int or type(b) is not int):
+        return 'Error(eea): Invalid input num'
+    elif(a == 0 and b == 0):
+        return 'Error(eea): Invalid input num'
+    else:
+        return sub_eea(a,b)
+def sub_eea(a,b):
+    if(a==0):
+        return (b,0,1)
+    else:
+        g,x,y = sub_eea(b%a,a)
+        return (g,y-(b//a)*x, x)
+        
 
 #-----------------------------------------------------------
 # Parameters:   a (an integer)
@@ -259,7 +405,17 @@ def eea(a,b):
 #-----------------------------------------------------------
 def mul_inv(a,m):
     # your code here
-    return
+    if(type(a) is not int or type(m) is not int):
+        return 'Error (mul_inv): Invalid input num'
+    elif(m < 1):
+        return 'Error (mul_inv): Invalid mod'
+    else:
+        resSet = residue_set(m)
+        for residue in resSet[1:]:
+            if((a*residue) %m == 1):
+                return residue
+            
+    return 'NA'
 
 #-----------------------------------------------------------
 # Parameters:   m (positive integer)
@@ -273,7 +429,21 @@ def mul_inv(a,m):
 #-----------------------------------------------------------
 def mul_inv_table(m):
     # your code here
-    return
+    if(type(m) is not int):
+        print('Error (mul_inv_table): Invalid mod')
+        return 'Error (mul_inv_table): Invalid mod'
+    elif(m < 1):
+        print('Error (mul_inv_table): Invalid mod')
+        return 'Error (mul_inv_table): Invalid mod'
+    topRow = []
+    botRow = []
+    matrix = []
+    for i in range(m):
+        topRow.append(i)
+        botRow.append(mul_inv(i,m))
+    matrix.append(topRow)
+    matrix.append(botRow)
+    return matrix
 
 # ----- Testing Function -------------
 # you may use this function to test your solution locally
