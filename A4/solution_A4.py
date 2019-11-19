@@ -117,6 +117,7 @@ def cryptanalysis_decimation(ciphertext):
 #-----------------------------------------------------------
 def e_affine(plaintext,key):
     # your code here
+    ciphertext = ''
     return ciphertext
 
 #-----------------------------------------------------------

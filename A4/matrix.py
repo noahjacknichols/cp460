@@ -18,8 +18,14 @@ import mod
 #-----------------------------------------------------------
 def is_vector(A):
     # your code here
-    return
+    if(type(A) is not list):
+        return False
+    else:
+        for i in range(len(A)):
+            if(type(A[i]) is not int):
+                return False
 
+    return True
 #-----------------------------------------------------------
 # Parameters:   A (any input)
 # Return:       True/False
@@ -30,7 +36,12 @@ def is_vector(A):
 #-----------------------------------------------------------
 def is_matrix(A):
     # your code here
-    return
+    if(type(A) is not list):
+        return 'Error'
+    for x in range(len(A)):
+        if(len(x)!= len(A)):
+            return False
+    return True
 
 #-----------------------------------------------------------
 # Parameters:   A (a matrix)
@@ -40,6 +51,11 @@ def is_matrix(A):
 #-----------------------------------------------------------
 def print_matrix(A):
     # your code here
+    if(is_matrix(A)):
+        for x in A:
+            print(x)
+    else:
+        return 'Error (print_matrix): Invalid input'
     return
 
 #-----------------------------------------------------------
@@ -54,6 +70,11 @@ def print_matrix(A):
 #-----------------------------------------------------------
 def get_rowCount(A):
     # your code here
+    if(is_matrix(A) != True):
+        return 'Error (get_rowCount): invalid input'
+    else:
+        return len(A[0])
+
     return
 
 #-----------------------------------------------------------
@@ -68,6 +89,14 @@ def get_rowCount(A):
 #-----------------------------------------------------------
 def get_columnCount(A):
     # your code here
+    if(is_matrix(A) != True):
+        return 'Error (get_columnCount): invalid input'
+    
+    x = A[0]
+    if(type(x) is not list):
+        return len(A)
+    else:
+        return len(x)
     return
 
 #-----------------------------------------------------------
@@ -81,8 +110,11 @@ def get_columnCount(A):
 #                   return 'Error (get_size): invalid input'
 #-----------------------------------------------------------
 def get_size(A):
-    # your code here
-    return
+    col = get_columnCount(A)
+    row = get_rowCount(A)
+    
+
+    return [row,col]
 
 #-----------------------------------------------------------
 # Parameters:   A (any input)
@@ -96,7 +128,10 @@ def get_size(A):
 #-----------------------------------------------------------
 def is_square(A):
     # your code here
-    return
+    col = get_columnCount(A)
+    row = get_rowCount(A)
+
+    return col==row
 
 #-----------------------------------------------------------
 # Parameters:   A (a matrix)
@@ -113,7 +148,11 @@ def is_square(A):
 #-----------------------------------------------------------
 def get_row(A,i):
     # your code here
-    return
+    if(is_matrix(A)!= True):
+        return 'Error (get_row): invalid row number'
+    elif(len(A) < 1):
+        return 'Error (get_row): invalid input number'
+    return A[i]
 
 #-----------------------------------------------------------
 # Parameters:   A (a matrix)
@@ -131,7 +170,17 @@ def get_row(A,i):
 #-----------------------------------------------------------
 def get_column(A,j):
     # your code here
-    return
+    if(is_matrix(A) != True):
+        return 'Error (get_column): invalid input matrix'
+    elif(len(A) < 1):
+        return 'Error (get_column): invalid input matrix'
+    elif(len(A[0]) < j or j < 0):
+        return 'Error (get_column): invalid column number'
+    col = []
+
+    for x in range(A):
+        col.append(x[j])
+    return col
 
 #-----------------------------------------------------------
 # Parameters:   A (a matrix)
@@ -146,7 +195,17 @@ def get_column(A,j):
 #-----------------------------------------------------------
 def get_element(A,i,j):
     # your code here
-    return
+    if(is_matrix(A) != True):
+        return 'Error (get_column): invalid input matrix'
+    elif(len(A) < 1):
+        return 'Error (get_column): invalid input matrix'
+    elif(len(A[0]) < j or len(A) < i or j < 0 or i < 0):
+        return 'Error (get_column): invalid element position'
+
+    x = A[i]
+
+    
+    return x[j]
 
 #-----------------------------------------------------------
 # Parameters:   r: #rows (int)
@@ -163,7 +222,8 @@ def get_element(A,i,j):
 #-----------------------------------------------------------
 def new_matrix(r,c,pad):
     # your code here
-    return
+    matrix = [[pad*c]*r] 
+    return matrix
 
 #-----------------------------------------------------------
 # Parameters:   size (int)
@@ -177,6 +237,7 @@ def new_matrix(r,c,pad):
 #-----------------------------------------------------------
 def get_I(size):
     # your code here
+    
     return
 
 #-----------------------------------------------------------
