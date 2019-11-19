@@ -311,7 +311,8 @@ def gcd(a,b):
     if(type(a) is not int or type(b) is not int):
         return 'Error (gcd): Invalid input value'
     elif(a < 1 or b < 1):
-        return 'Error (gcd): Invalid input value' 
+        a = abs(a)
+        b = abs(b) 
 
     r = a%b 
     while r:

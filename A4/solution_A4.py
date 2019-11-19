@@ -32,6 +32,32 @@ import utilities_A4
 #-----------------------------------------------------------
 def e_decimation(plaintext,key):
     # your code here
+    ciphertext = ''
+    # print("KEY 1:",key[1])
+    scopeAlpha = key[0]
+    # print(scopeAlpha)
+    if(mod.has_mul_inv(key[1],len(key[0])) != True):
+        print('Error (e_decimation): Invalid Key')
+        return 'Error (e_decimation): Invalid Key'
+
+    for i in range(len(plaintext)):
+            # print(plaintext[i])
+            if(plaintext[i].lower() in scopeAlpha):
+                if(plaintext[i].isupper()):
+                    upper = True
+                else:
+                    upper = False
+                cVal = key[1] * (scopeAlpha.index(plaintext[i].lower())) % len(scopeAlpha)
+                # print("CVAL:", cVal)
+                cVal = cVal % len(scopeAlpha)
+                # cVal = cVal + 26 if upper else cVal
+            # print("CVAL:",cVal)
+            # print("cVal is:", chr(cVal))
+                ciphertext+= scopeAlpha[cVal].upper() if upper else scopeAlpha[cVal]
+            else:
+                ciphertext+=plaintext[i]
+
+
     return ciphertext
 
 #-----------------------------------------------------------
@@ -47,6 +73,23 @@ def e_decimation(plaintext,key):
 #-----------------------------------------------------------
 def d_decimation(ciphertext,key):
     # your code here
+    plaintext =''
+    scopeAlpha = key[0]
+    if(mod.has_mul_inv(key[1], len(key[0])) != True):
+        print('Error (d_decimation): Invalid Key')
+        return ('Error (d_decimation): Invalid Key')
+    for i in range(len(ciphertext)):
+        if(ciphertext[i].lower() in scopeAlpha):
+            if(ciphertext[i].isupper()):
+                upper = True
+            else:
+                upper = False
+            cVal = key[1] * (scopeAlpha.index(ciphertext[i].lower())) % len(scopeAlpha)
+            
+            plaintext+=scopeAlpha[cVal].upper() if upper else scopeAlpha[cVal]
+        else:
+            plaintext+=ciphertext[i]
+
     return plaintext
 
 #-----------------------------------------------------------
