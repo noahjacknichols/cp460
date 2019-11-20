@@ -237,8 +237,15 @@ def new_matrix(r,c,pad):
 #-----------------------------------------------------------
 def get_I(size):
     # your code here
+    if(size <1):
+        return 'Error (get_I): invalid size'
+    matrix = [[0 * size]*size]
+    for i in range(size):
+        for j in range(size):
+            if(j==1):
+                matrix[j][i] = 1
     
-    return
+    return matrix
 
 #-----------------------------------------------------------
 # Parameters:   A (any input)
@@ -247,7 +254,16 @@ def get_I(size):
 #-----------------------------------------------------------
 def is_identity(A):
     # your code here
-    return
+    if(type(A) is not list):
+        return False
+    if(len(A[0]) < 1):
+        return False
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            if(i != j and A[i][j] != 0):
+                return False
+            
+    return True
 
 #-----------------------------------------------------------
 # Parameters:   c (int)
@@ -259,7 +275,15 @@ def is_identity(A):
 #-----------------------------------------------------------
 def scalar_mul(c,A):
     # your code here
-    return
+    if(type(A) is not list or len(A) <1):
+        return 'Error(scalar_mul): invalid input'
+    elif(type(c) is not int):
+        return 'Error(scalar_mul): invalid input'
+
+    for i in range(len(A)):
+        for j in range(len(A[i])):
+            A[i][j] *= c
+    return A
 
 #-----------------------------------------------------------
 # Parameters:   A (matrix)
@@ -273,6 +297,16 @@ def scalar_mul(c,A):
 #-----------------------------------------------------------
 def mul(A,B):
     # your code here
+    if(is_matrix(A) != True or is_matrix(B) != True):
+        return 'Error(mul): invalid input'
+    colA = max(A[i] for i in range(len(A)))
+    colB = max(B[i] for i in range(len(B)))
+    rowA = len(A)
+    rowB = len(B)
+    if(colA != colB or rowA != rowB):
+        return 'Error(mul): size mismatch'
+
+    matrix = []
     return
 
 #-----------------------------------------------------------
